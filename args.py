@@ -5,7 +5,7 @@ import argparse
 parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
 parser.add_argument('-d', '--data_set', type=str, default='tic-tac-toe',
                     help='Set the data set for training. All the data sets in the dataset folder are available.')
-parser.add_argument('-i', '--device_ids', type=str, default=None, help='Set the device (GPU ids). Split by @.'
+parser.add_argument('-i', '--device_ids', type=str, default='0', help='Set the device (GPU ids). Split by @.'
                                                                        ' E.g., 0@2@3.')
 parser.add_argument('-nr', '--nr', default=0, type=int, help='ranking within the nodes')
 parser.add_argument('-e', '--epoch', type=int, default=41, help='Set the total epoch.')

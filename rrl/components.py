@@ -64,7 +64,7 @@ class BinarizeLayer(nn.Module):
             x = x.unsqueeze(-1)
             if self.use_not:
                 x_disc = torch.cat((x_disc, 1 - x_disc), dim=1)
-            binarize_res = Binarize.apply(x - self.cl.t()).view(x.shape[0], -1)
+            binarize_res = Binarize.apply(x - self.cl.t()).reshape(x.shape[0], -1)
             return torch.cat((x_disc, binarize_res, 1. - binarize_res), dim=1)
         if self.use_not:
             x = torch.cat((x, 1 - x), dim=1)

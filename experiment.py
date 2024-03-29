@@ -13,16 +13,21 @@ from collections import defaultdict
 
 from rrl.utils import read_csv, DBEncoder
 from rrl.models import RRL
+import pandas as pd
 
 DATA_DIR = './dataset'
 
 
-def get_data_loader(dataset, world_size, rank, batch_size, k=0, pin_memory=False, save_best=True):
-    data_path = os.path.join(DATA_DIR, dataset + '.data')
-    info_path = os.path.join(DATA_DIR, dataset + '.info')
-    X_df, y_df, f_df, label_pos = read_csv(data_path, info_path, shuffle=True)
+def get_data_loader(X_df, y_df, world_size, rank, batch_size, k=0, pin_memory=False, save_best=True):
+    # data_path = os.path.join(DATA_DIR, dataset + '.data')
+    # info_path = os.path.join(DATA_DIR, dataset + '.info')
+    # X_df, y_df, f_df, label_pos = read_csv(data_path, info_path, shuffle=True)
+    f_df = pd.DataFrame(np.zeros((X_df.shape[1], 2)), columns=[0, 1])
+    f_df.iloc[:, 0] = X_df.columns
+    # Columns that are float or int are continuous, others are discrete.
+    f_df.iloc[:, 1] = ['continuous' if X_df[col].dtype in [np.float64, np.int64] else 'discrete' for col in X_df.columns]
 
-    db_enc = DBEncoder(f_df, discrete=False)
+    db_enc = DBEncoder(f_df, discrete=False, y_one_hot=False)
     db_enc.fit(X_df, y_df)
 
     X, y = db_enc.transform(X_df, y_df, normalized=True, keep_stat=True)
@@ -54,20 +59,34 @@ def get_data_loader(dataset, world_size, rank, batch_size, k=0, pin_memory=False
 
 def train_model(gpu, args):
     rank = args.nr * args.gpus + gpu
-    dist.init_process_group(backend='nccl', init_method='env://', world_size=args.world_size, rank=rank)
+    #dist.init_process_group(backend='nccl', init_method='env://', world_size=args.world_size, rank=rank)
     torch.manual_seed(42)
     device_id = args.device_ids[gpu]
     torch.cuda.set_device(device_id)
 
     if gpu == 0:
-        writer = SummaryWriter(args.folder_path)
+        # writer = SummaryWriter(args.folder_path)
+        writer = None # No tensorboard
         is_rank0 = True
     else:
         writer = None
         is_rank0 = False
 
     dataset = args.data_set
-    db_enc, train_loader, valid_loader, _ = get_data_loader(dataset, args.world_size, rank, args.batch_size,
+    # Load iris
+    from sklearn.datasets import load_iris
+
+    # Load the iris dataset
+    iris = load_iris()
+
+    # The iris object that's returned by load_iris is a Bunch object, which is very similar to a dictionary.
+    # It contains keys and values:
+    data = pd.DataFrame(iris.data, columns = iris.feature_names)
+    target = pd.DataFrame(iris.target)
+    target_names = iris.target_names
+    feature_names = iris.feature_names
+    
+    db_enc, train_loader, valid_loader, _ = get_data_loader(data, target, args.world_size, rank, args.batch_size,
                                                             k=args.ith_kfold, pin_memory=True, save_best=args.save_best)
 
     X_fname = db_enc.X_fname
@@ -171,5 +190,5 @@ if __name__ == '__main__':
     from args import rrl_args
     # for arg in vars(rrl_args):
     #     print(arg, getattr(rrl_args, arg))
-    train_main(rrl_args)
+    train_model(0, rrl_args)
     test_model(rrl_args)

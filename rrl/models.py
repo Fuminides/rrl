@@ -92,7 +92,7 @@ class MyDistributedDataParallel(torch.nn.parallel.DistributedDataParallel):
 
 class RRL:
     def __init__(self, dim_list, device_id, use_not=False, is_rank0=False, log_file=None, writer=None, left=None,
-                 right=None, save_best=False, estimated_grad=False, save_path=None, distributed=True, use_skip=False, 
+                 right=None, save_best=False, estimated_grad=False, save_path=None, distributed=False, use_skip=False, 
                  use_nlaf=False, alpha=0.999, beta=8, gamma=1, temperature=0.01):
         super(RRL, self).__init__()
         self.dim_list = dim_list
@@ -196,7 +196,16 @@ class RRL:
                 
                 # trainable softmax temperature
                 y_bar = self.net.forward(X) / torch.exp(self.net.t)
-                y_arg = torch.argmax(y, dim=1)
+
+                if len(y.shape) == 1:  # y is not one-hot
+                    y_arg = y
+                elif y.shape[1] == 1:  # y is not one-hot
+                    y_arg = y
+                else:
+                    y_arg = torch.argmax(y, dim=1)
+                
+                # To long tensor
+                y_arg = y_arg.long()
                 
                 loss_rrl = criterion(y_bar, y_arg) + weight_decay * self.l2_penalty()
                 
