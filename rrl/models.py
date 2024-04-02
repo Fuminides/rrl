@@ -10,7 +10,7 @@ from rrl.components import BinarizeLayer
 from rrl.components import UnionLayer, LRLayer
 
 TEST_CNT_MOD = 500
-
+cuda = False
 
 class Net(nn.Module):
     def __init__(self, dim_list, use_not=False, left=None, right=None, use_nlaf=False, estimated_grad=False, use_skip=True, alpha=0.999, beta=8, gamma=1, temperature=0.01):
@@ -122,7 +122,8 @@ class RRL:
         self.writer = writer
 
         self.net = Net(dim_list, use_not=use_not, left=left, right=right, use_nlaf=use_nlaf, estimated_grad=estimated_grad, use_skip=use_skip, alpha=alpha, beta=beta, gamma=gamma, temperature=temperature)
-        self.net.cuda(self.device_id)
+        if cuda:
+            self.net.cuda(self.device_id)
         if distributed:
             self.net = MyDistributedDataParallel(self.net, device_ids=[self.device_id])
 
@@ -173,7 +174,10 @@ class RRL:
         accuracy_b = []
         f1_score_b = []
 
-        criterion = nn.CrossEntropyLoss().cuda(self.device_id)
+        criterion = nn.CrossEntropyLoss()
+        if cuda:
+            criterion = criterion.cuda(self.device_id)
+
         optimizer = torch.optim.Adam(self.net.parameters(), lr=lr, weight_decay=0.0)
 
         cnt = -1
@@ -190,8 +194,9 @@ class RRL:
             ba_cnt = 0
             for X, y in data_loader:
                 ba_cnt += 1
-                X = X.cuda(self.device_id, non_blocking=True)
-                y = y.cuda(self.device_id, non_blocking=True)
+                if cuda:
+                    X = X.cuda(self.device_id, non_blocking=True)
+                    y = y.cuda(self.device_id, non_blocking=True)
                 optimizer.zero_grad()  # Zero the gradient buffers.
                 
                 # trainable softmax temperature
@@ -267,8 +272,11 @@ class RRL:
         for X, y in test_loader:
             y_list.append(y)
         y_true = torch.cat(y_list, dim=0)
-        y_true = y_true.cpu().numpy().astype(np.int)
-        y_true = np.argmax(y_true, axis=1)
+        y_true = y_true.cpu().numpy().astype(int)
+
+        if len(y_true.shape) == 2:
+            y_true = np.argmax(y_true, axis=1)
+            
         data_num = y_true.shape[0]
 
         slice_step = data_num // 40 if data_num >= 40 else 1
@@ -276,7 +284,8 @@ class RRL:
 
         y_pred_b_list = []
         for X, y in test_loader:
-            X = X.cuda(self.device_id, non_blocking=True)
+            if cuda:
+                X = X.cuda(self.device_id, non_blocking=True)
             output = self.net.forward(X)
             y_pred_b_list.append(output)
 
@@ -305,14 +314,23 @@ class RRL:
     def detect_dead_node(self, data_loader=None):
         with torch.no_grad():
             for layer in self.net.layer_list[:-1]:
-                layer.node_activation_cnt = torch.zeros(layer.output_dim, dtype=torch.double, device=self.device_id)
+                if cuda:
+                    actual_device = torch.device('cuda:{}'.format(self.device_id))
+                else:
+                    actual_device = torch.device('cpu')
+                layer.node_activation_cnt = torch.zeros(layer.output_dim, dtype=torch.double, device=actual_device)
                 layer.forward_tot = 0
 
             for x, y in data_loader:
-                x_bar = x.cuda(self.device_id)
+                if cuda:
+                    x_bar = x.cuda(self.device_id)
+                else:
+                    x_bar = x
+
                 self.net.bi_forward(x_bar, count=True)
 
     def rule_print(self, feature_name, label_name, train_loader, file=sys.stdout, mean=None, std=None, display=True):
+        print_str = ''
         if self.net.layer_list[1] is None and train_loader is None:
             raise Exception("Need train_loader for the dead nodes detection.")
 
@@ -338,17 +356,18 @@ class RRL:
         if not display:
             return layer.rule2weights
         
-        print('RID', end='\t', file=file)
+        print_str += 'RID\t'
         for i, ln in enumerate(label_name):
-            print('{}(b={:.4f})'.format(ln, layer.bl[i]), end='\t', file=file)
-        print('Support\tRule', file=file)
+            print_str += '{}(b={:.4f})\t'.format(ln, layer.bl[i])
+        print_str += 'Support\tRule\n'
         for rid, w in layer.rule2weights:
-            print(rid, end='\t', file=file)
+            print_str +=str(rid) + '\t'
             for li in range(len(label_name)):
-                print('{:.4f}'.format(w[li]), end='\t', file=file)
+                print_str += '{:.4f}'.format(w[li]) + '\t'
             now_layer = self.net.layer_list[-1 + rid[0]]
-            print('{:.4f}'.format((now_layer.node_activation_cnt[layer.rid2dim[rid]] / now_layer.forward_tot).item()),
-                  end='\t', file=file)
-            print(now_layer.rule_name[rid[1]], end='\n', file=file)
-        print('#' * 60, file=file)
+            print_str += '{:.4f}'.format((now_layer.node_activation_cnt[layer.rid2dim[rid]] / now_layer.forward_tot).item()) + '\t'
+            print_str += now_layer.rule_name[rid[1]] + '\n'
+        print_str += '#' * 60
+        file.write(print_str)
+
         return layer.rule2weights

@@ -1,0 +1,107 @@
+RID	0(b=-0.0946)	Support	Rule
+(-1, 56)	0.2915	0.5000	petal length (cm) <= 4.367
+(-1, 58)	0.4216	0.3250	petal length (cm) <= 2.514 | petal width (cm) <= 0.844
+(-1, 57)	-0.1672	0.5750	petal length (cm) > 5.466 | petal width (cm) > 1.972 | sepal length (cm) <= 5.374
+(-1, 53)	0.0364	0.5750	sepal width (cm) > 3.209 | petal length (cm) <= 4.367
+(-1, 60)	0.1761	0.6000	sepal width (cm) > 3.507 | petal length (cm) > 5.466 | petal width (cm) > 1.972 | petal width (cm) <= 0.844
+(-1, 70)	0.0673	0.8333	sepal width (cm) > 3.703 | petal length (cm) > 5.450 | sepal length (cm) <= 6.280 | petal width (cm) <= 0.102
+(-1, 74)	-0.3305	0.6333	petal length (cm) > 4.367 | petal width (cm) > 1.972 | sepal width (cm) <= 2.872
+(-1, 61)	0.0237	0.7833	petal width (cm) <= 1.972
+(-1, 103)	-0.3035	0.6750	sepal length (cm) > 6.521 | petal length (cm) > 4.367 | petal width (cm) > 0.844
+(-1, 55)	0.2890	0.3833	sepal width (cm) > 3.703 | sepal length (cm) <= 5.374 | petal length (cm) <= 2.514 | petal width (cm) <= 0.114
+(-1, 102)	-0.2925	0.8000	petal length (cm) > 4.221 | petal width (cm) > 1.972 | sepal width (cm) <= 3.209
+(-1, 71)	-0.2796	0.6833	petal width (cm) > 0.844 | sepal width (cm) <= 2.872
+(-1, 88)	-0.2718	0.6750	sepal length (cm) > 6.521 | petal length (cm) > 2.514 | petal width (cm) > 0.844
+(-1, 83)	0.2110	0.6000	petal length (cm) > 5.450 | petal width (cm) > 1.972 | petal length (cm) <= 2.514 | petal width (cm) <= 0.844
+(-1, 85)	0.1572	0.5333	sepal length (cm) <= 5.747 | petal length (cm) <= 4.367 | petal width (cm) <= 0.844
+(-1, 75)	-0.2656	0.6917	sepal length (cm) > 5.747 | petal length (cm) > 2.514 | petal width (cm) > 2.434 | sepal width (cm) <= 2.872
+(-1, 81)	-0.2562	0.7417	sepal length (cm) > 5.374 | petal length (cm) > 4.221 | petal width (cm) > 0.844
+(-1, 52)	-0.2547	0.6833	sepal length (cm) > 5.747 | petal length (cm) > 2.514
+(-1, 66)	-0.2516	0.8083	sepal length (cm) > 5.747 | petal length (cm) > 5.466 | petal width (cm) > 0.844 | sepal width (cm) <= 3.209
+(-1, 89)	0.0643	0.6000	sepal width (cm) > 3.209 | sepal length (cm) <= 5.747 | petal length (cm) <= 4.221
+(-1, 96)	-0.1647	0.5167	petal length (cm) > 5.466 | petal width (cm) > 1.972 | sepal width (cm) <= 2.872
+(-1, 84)	0.1192	0.5750	sepal width (cm) > 3.209 | sepal length (cm) <= 5.374 | petal length (cm) <= 4.221 | petal width (cm) <= 0.844
+(-1, 72)	0.0681	0.9250	sepal width (cm) > 3.507 | petal length (cm) > 5.450 | petal width (cm) > 2.434 | sepal length (cm) <= 6.521 | petal length (cm) <= 2.514 | petal width (cm) <= 0.844
+(-1, 63)	0.1631	0.7917	petal length (cm) <= 5.466 | petal width (cm) <= 0.844
+(-1, 54)	-0.2158	0.5000	petal length (cm) > 4.367 | petal width (cm) > 2.434
+(-1, 76)	-0.2145	0.7500	sepal length (cm) > 5.374 | petal width (cm) > 0.844 | sepal width (cm) <= 2.872
+(-1, 94)	0.1950	0.9500	sepal width (cm) > 3.507 | petal length (cm) > 5.450 | petal width (cm) > 1.972 | sepal length (cm) <= 6.521 | petal length (cm) <= 2.514 | petal width (cm) <= 0.102
+(-1, 31)	0.0813	0.2583	sepal length (cm) <= 5.374 & petal length (cm) <= 2.514
+(-1, 50)	0.1998	0.7083	sepal width (cm) > 2.872 | petal length (cm) <= 2.514
+(-1, 15)	-0.1340	0.1583	petal length (cm) > 4.367 & petal width (cm) > 1.972 & sepal width (cm) <= 3.209
+(-1, 51)	-0.1919	0.5000	petal length (cm) > 4.367
+(-1, 97)	0.0904	0.8083	sepal width (cm) > 3.507 | petal length (cm) <= 4.367 | petal width (cm) <= 1.972
+(-1, 73)	0.1913	0.5333	sepal width (cm) > 3.507 | sepal length (cm) <= 5.374 | petal length (cm) <= 4.367 | petal width (cm) <= 0.844
+(-1, 67)	-0.1815	0.5083	petal length (cm) > 4.221 | petal width (cm) > 1.972
+(-1, 69)	-0.1812	0.7500	sepal length (cm) > 5.374 | petal length (cm) > 2.514 | petal width (cm) > 2.434 | sepal width (cm) <= 2.872
+(-1, 78)	0.1773	0.3833	sepal width (cm) > 3.703 | sepal length (cm) <= 5.374 | petal length (cm) <= 2.514
+(-1, 100)	-0.1250	0.4583	petal length (cm) > 5.466 | sepal width (cm) <= 2.872
+(-1, 47)	-0.0667	0.1750	petal length (cm) > 2.514 & petal width (cm) > 0.844 & sepal width (cm) <= 3.507 & petal length (cm) <= 4.367
+(-1, 87)	-0.1364	0.2750	petal length (cm) > 5.450 | petal width (cm) > 1.972
+(-1, 104)	0.1566	0.4917	sepal length (cm) <= 5.747 | petal length (cm) <= 2.514 | petal width (cm) <= 0.844
+(-1, 28)	0.1356	0.3167	sepal width (cm) > 2.872 & sepal length (cm) <= 6.521 & petal length (cm) <= 2.514
+(-1, 37)	-0.1579	0.2083	petal length (cm) > 5.450
+(-1, 2)	-0.0000	0.2167	petal width (cm) > 1.972
+(-1, 62)	-0.1557	0.7417	sepal length (cm) > 5.374 | petal length (cm) > 2.514 | petal width (cm) > 0.844
+(-1, 90)	-0.0089	0.7917	petal length (cm) <= 5.466
+(-1, 92)	-0.1546	0.6750	petal length (cm) > 2.514 | petal width (cm) > 0.844
+(-1, 11)	0.1539	0.0917	sepal width (cm) > 3.507 & sepal length (cm) <= 6.521
+(-1, 39)	0.0156	0.0750	petal width (cm) > 1.972 & sepal length (cm) <= 6.521
+(-1, 59)	0.1294	0.8583	sepal width (cm) > 2.872 | sepal length (cm) <= 5.747 | petal length (cm) <= 4.221
+(-1, 82)	-0.1514	0.9667	sepal length (cm) > 5.374 | petal length (cm) > 5.466 | petal width (cm) > 0.114 | sepal width (cm) <= 2.872
+(-1, 29)	0.0030	0.4250	sepal length (cm) > 5.374 & petal length (cm) > 2.514 & sepal width (cm) <= 3.703 & petal length (cm) <= 5.450
+(-1, 91)	0.0290	0.8417	sepal width (cm) > 3.209 | petal length (cm) <= 5.450
+(-1, 42)	0.1422	0.2500	sepal width (cm) > 2.872 & sepal length (cm) <= 5.374 & petal length (cm) <= 2.514
+(-1, 49)	0.1405	0.3083	sepal width (cm) > 2.872 & sepal length (cm) <= 5.747 & petal width (cm) <= 0.844
+(-1, 68)	0.0254	0.8333	sepal width (cm) > 2.872 | petal length (cm) <= 4.367 | petal width (cm) <= 0.102
+(-1, 7)	-0.1103	0.3583	sepal length (cm) > 5.374 & petal width (cm) > 0.844 & petal length (cm) <= 5.466 & petal width (cm) <= 1.972
+(-1, 80)	0.1310	0.3667	sepal length (cm) <= 5.374 | petal width (cm) <= 0.844
+(-1, 5)	0.0529	0.5000	petal length (cm) > 4.367
+(-1, 12)	0.0174	0.2000	sepal width (cm) > 2.633 & petal width (cm) > 1.972
+(-1, 0)	-0.1274	0.2750	petal length (cm) > 4.367 & petal width (cm) > 0.844 & sepal length (cm) <= 6.521 & sepal width (cm) <= 3.703 & petal width (cm) <= 2.434
+(-1, 13)	0.0838	0.5000	petal length (cm) <= 4.367 & petal width (cm) <= 1.972
+(-1, 14)	0.0907	0.3167	sepal width (cm) > 2.872 & sepal length (cm) <= 6.275 & petal length (cm) <= 2.514 & petal width (cm) <= 2.434
+(-1, 77)	-0.0099	0.8500	petal length (cm) <= 5.450 | petal width (cm) <= 1.972
+(-1, 36)	-0.0512	0.2167	petal length (cm) > 4.367 & petal width (cm) > 1.972
+(-1, 10)	-0.1236	0.3500	sepal length (cm) > 6.275 & petal length (cm) > 2.514 & petal width (cm) > 0.844 & sepal width (cm) <= 3.507
+(-1, 27)	-0.0865	0.4750	sepal length (cm) > 5.747 & petal length (cm) > 4.221 & petal width (cm) > 0.114
+(-1, 48)	-0.1207	0.6750	petal length (cm) > 2.514 & petal width (cm) > 0.844
+(-1, 30)	-0.0395	0.3000	sepal length (cm) > 5.747 & petal width (cm) > 0.114 & sepal width (cm) <= 3.703 & petal length (cm) <= 5.450
+(-1, 20)	0.0864	0.3667	sepal width (cm) > 2.872 & sepal length (cm) <= 6.521 & petal length (cm) <= 4.367 & petal width (cm) <= 1.972
+(-1, 99)	-0.1162	0.9667	sepal length (cm) > 6.521 | petal length (cm) > 5.466 | petal width (cm) > 0.102 | sepal width (cm) <= 2.872
+(-1, 25)	0.1156	0.2583	sepal length (cm) <= 5.374 & petal width (cm) <= 0.844
+(-1, 16)	0.1148	0.0583	sepal width (cm) > 3.703 & sepal length (cm) <= 6.275 & petal width (cm) <= 0.844
+(-1, 38)	0.1129	0.3250	petal length (cm) <= 2.514 & petal width (cm) <= 0.844
+(-1, 6)	0.0670	0.0583	sepal width (cm) > 3.703 & sepal length (cm) <= 6.521
+(-1, 3)	0.0531	0.1500	petal length (cm) > 5.466 & petal width (cm) > 1.972
+(-1, 95)	0.0006	0.7917	petal length (cm) <= 5.450
+(-1, 4)	0.0093	0.0583	sepal width (cm) > 3.703 & sepal length (cm) <= 6.521 & petal length (cm) <= 4.221 & petal width (cm) <= 0.844
+(-1, 79)	0.1016	0.1417	sepal width (cm) > 3.507 | petal width (cm) <= 0.114
+(-1, 98)	-0.1008	0.7417	sepal length (cm) > 5.374 | petal length (cm) > 2.514
+(-1, 34)	0.0250	0.4167	sepal length (cm) > 5.747 & sepal width (cm) > 2.633 & petal length (cm) > 4.221
+(-1, 93)	-0.0829	0.1667	sepal width (cm) <= 2.633
+(-1, 45)	-0.0928	0.2583	sepal length (cm) > 5.374 & petal length (cm) > 2.514 & sepal length (cm) <= 6.280 & petal length (cm) <= 5.466
+(-1, 1)	0.0121	0.0583	petal length (cm) > 5.450 & sepal length (cm) <= 6.521
+(-1, 44)	-0.0910	0.4833	petal length (cm) > 4.367 & sepal width (cm) <= 3.703
+(-1, 65)	-0.0588	0.9417	sepal length (cm) > 6.280 | sepal width (cm) <= 3.703
+(-1, 9)	0.0865	0.6083	sepal length (cm) <= 6.275 & petal width (cm) <= 1.972
+(-1, 8)	-0.0320	0.9000	petal width (cm) > 0.114 & sepal width (cm) <= 3.703
+(-1, 19)	-0.0838	0.3750	sepal length (cm) > 6.280 & petal width (cm) > 0.844
+(-1, 40)	-0.0319	0.0167	sepal length (cm) > 6.521 & sepal width (cm) <= 2.633
+(-1, 86)	0.0778	0.8583	sepal width (cm) > 2.633 | petal width (cm) > 1.972 | petal length (cm) <= 2.514 | petal width (cm) <= 0.844
+(-1, 17)	0.0431	0.3250	sepal length (cm) <= 6.521 & petal length (cm) <= 2.514
+(-1, 21)	0.0219	0.3250	petal length (cm) <= 2.514
+(-1, 26)	0.0744	0.3167	sepal width (cm) > 2.872 & sepal length (cm) <= 6.275 & petal length (cm) <= 2.514
+(-1, 46)	0.0326	0.0917	sepal width (cm) > 3.507 & petal length (cm) <= 2.514
+(-1, 23)	-0.0700	0.3917	sepal length (cm) > 5.747 & petal length (cm) > 4.367 & petal width (cm) > 0.114 & sepal width (cm) <= 3.209 & petal width (cm) <= 2.434
+(-1, 18)	0.0692	0.0500	sepal width (cm) > 3.703 & sepal length (cm) <= 5.747 & petal length (cm) <= 4.221
+(-1, 43)	-0.0682	0.0167	petal width (cm) > 2.434 & sepal width (cm) <= 3.703
+(-1, 41)	-0.0417	0.3750	sepal length (cm) > 6.280 & petal width (cm) > 0.114
+(-1, 101)	0.0618	0.5667	sepal width (cm) > 3.209 | sepal length (cm) <= 5.747 | petal width (cm) <= 0.114
+(-1, 35)	-0.0581	0.5167	sepal length (cm) > 5.747
+(-1, 22)	0.0095	0.3500	sepal width (cm) > 2.872 & sepal length (cm) <= 5.747
+(-1, 32)	-0.0170	0.5083	petal length (cm) > 4.221
+(-1, 24)	-0.0155	0.7000	petal width (cm) > 0.102 & sepal width (cm) <= 3.209
+(-1, 33)	0.0267	0.2083	sepal width (cm) > 3.209 & sepal length (cm) <= 6.280 & petal length (cm) <= 5.466 & petal width (cm) <= 1.972
+(-1, 64)	0.0019	0.5917	sepal length (cm) > 6.521 | sepal width (cm) > 3.507 | petal length (cm) > 4.367
+############################################################

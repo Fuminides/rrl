@@ -12,11 +12,10 @@ from sklearn.model_selection import KFold, train_test_split
 from collections import defaultdict
 
 from rrl.utils import read_csv, DBEncoder
-from rrl.models import RRL
+from rrl.models import RRL, cuda
 import pandas as pd
 
 DATA_DIR = './dataset'
-
 
 def get_data_loader(X_df, y_df, world_size, rank, batch_size, k=0, pin_memory=False, save_best=True):
     # data_path = os.path.join(DATA_DIR, dataset + '.data')
@@ -48,21 +47,20 @@ def get_data_loader(X_df, y_df, world_size, rank, batch_size, k=0, pin_memory=Fa
     if save_best:  # use validation set for model selections.
         train_set = train_sub
 
-    train_sampler = torch.utils.data.distributed.DistributedSampler(train_set, num_replicas=world_size, rank=rank)
-
-    train_loader = DataLoader(train_set, batch_size=batch_size, shuffle=False, pin_memory=pin_memory, sampler=train_sampler)
+    train_loader = DataLoader(train_set, batch_size=batch_size, shuffle=False, pin_memory=pin_memory)
     valid_loader = DataLoader(valid_set, batch_size=batch_size, shuffle=False, pin_memory=pin_memory)
     test_loader = DataLoader(test_set, batch_size=batch_size, shuffle=False, pin_memory=pin_memory)
 
     return db_enc, train_loader, valid_loader, test_loader
 
 
-def train_model(gpu, args):
+def train_model(gpu, args, data, target):
     rank = args.nr * args.gpus + gpu
     #dist.init_process_group(backend='nccl', init_method='env://', world_size=args.world_size, rank=rank)
     torch.manual_seed(42)
     device_id = args.device_ids[gpu]
-    torch.cuda.set_device(device_id)
+    if cuda:
+        torch.cuda.set_device(device_id)
 
     if gpu == 0:
         # writer = SummaryWriter(args.folder_path)
@@ -73,18 +71,6 @@ def train_model(gpu, args):
         is_rank0 = False
 
     dataset = args.data_set
-    # Load iris
-    from sklearn.datasets import load_iris
-
-    # Load the iris dataset
-    iris = load_iris()
-
-    # The iris object that's returned by load_iris is a Bunch object, which is very similar to a dictionary.
-    # It contains keys and values:
-    data = pd.DataFrame(iris.data, columns = iris.feature_names)
-    target = pd.DataFrame(iris.target)
-    target_names = iris.target_names
-    feature_names = iris.feature_names
     
     db_enc, train_loader, valid_loader, _ = get_data_loader(data, target, args.world_size, rank, args.batch_size,
                                                             k=args.ith_kfold, pin_memory=True, save_best=args.save_best)
@@ -94,7 +80,7 @@ def train_model(gpu, args):
     discrete_flen = db_enc.discrete_flen
     continuous_flen = db_enc.continuous_flen
 
-    rrl = RRL(dim_list=[(discrete_flen, continuous_flen)] + list(map(int, args.structure.split('@'))) + [len(y_fname)],
+    rrl = RRL(dim_list=[(discrete_flen, continuous_flen)] + list(map(int, args.structure.split('@'))) + [len(np.unique(target))],
               device_id=device_id,
               use_not=args.use_not,
               is_rank0=is_rank0,
@@ -138,21 +124,28 @@ def load_model(path, device_id, log_file=None, distributed=True):
         beta=saved_args['beta'],
         gamma=saved_args['gamma'])
     stat_dict = checkpoint['model_state_dict']
-    for key in list(stat_dict.keys()):
+    # for key in list(stat_dict.keys()):
         # remove 'module.' prefix
-        stat_dict[key[7:]] = stat_dict.pop(key)
+    #    stat_dict[key[7:]] = stat_dict.pop(key)
     rrl.net.load_state_dict(checkpoint['model_state_dict'])
     return rrl
 
 
-def test_model(args):
+def test_model(args, data, target):
     rrl = load_model(args.model, args.device_ids[0], log_file=args.test_res, distributed=False)
-    dataset = args.data_set
-    db_enc, train_loader, _, test_loader = get_data_loader(dataset, 4, 0, args.batch_size, args.ith_kfold, save_best=False)
+    
+    # The iris object that's returned by load_iris is a Bunch object, which is very similar to a dictionary.
+    # It contains keys and values:
+    
+    
+    db_enc, train_loader, valid_loader, test_loader = get_data_loader(data, target, args.world_size, 0, args.batch_size,
+                                                            k=args.ith_kfold, pin_memory=True, save_best=args.save_best)
+
+    # db_enc, train_loader, _, test_loader = get_data_loader(dataset, 4, 0, args.batch_size, args.ith_kfold, save_best=False)
     rrl.test(test_loader=test_loader, set_name='Test')
-    if args.print_rule:
+    if True: # args.print_rule:
         with open(args.rrl_file, 'w') as rrl_file:
-            rule2weights = rrl.rule_print(db_enc.X_fname, db_enc.y_fname, train_loader, file=rrl_file, mean=db_enc.mean, std=db_enc.std)
+            rule2weights = rrl.rule_print(db_enc.X_fname, list(np.unique(target)), train_loader, file=rrl_file, mean=db_enc.mean, std=db_enc.std)
     else:
         rule2weights = rrl.rule_print(db_enc.X_fname, db_enc.y_fname, train_loader, mean=db_enc.mean, std=db_enc.std, display=False)
     
@@ -190,5 +183,18 @@ if __name__ == '__main__':
     from args import rrl_args
     # for arg in vars(rrl_args):
     #     print(arg, getattr(rrl_args, arg))
-    train_model(0, rrl_args)
-    test_model(rrl_args)
+    # Load iris
+    from sklearn.datasets import load_iris
+
+    # Load the iris dataset
+    iris = load_iris()
+
+    # The iris object that's returned by load_iris is a Bunch object, which is very similar to a dictionary.
+    # It contains keys and values:
+    data = pd.DataFrame(iris.data, columns = iris.feature_names)
+    target = pd.DataFrame(iris.target)
+    target_names = iris.target_names
+    feature_names = iris.feature_names
+
+    train_model(0, rrl_args, data, target)
+    test_model(rrl_args, data, target)
